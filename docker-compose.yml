@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  redmine:
+    image: redmine
+    restart: always
+    ports:
+      - 53000:3000
+    environment:
+      REDMINE_DB_MYSQL: db
+      REDMINE_DB_PASSWORD: example
+      REDMINE_SECRET_KEY_BASE: supersecretkey
+      RAILS_ENV: development
+    volumes:
+      - ./plugins:/usr/src/redmine/plugins
+      - redmine_files:/usr/src/redmine/files
+      - redmine_log:/usr/src/redmine/log
+      - redmine_public_themes:/usr/src/redmine/public/themes
+
+  db:
+    image: mariadb
+    restart: always
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    ports:
+      - 53306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: redmine
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=example
+    links:
+      - db
+    ports:
+       - 50080:80
+
+volumes:
+  redmine_files:
+    driver: "local"
+  redmine_log:
+    driver: "local"
+  redmine_public_themes:
+    driver: "local"
+  mysql_data:
+    driver: "local"
