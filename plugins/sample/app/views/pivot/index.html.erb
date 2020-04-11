@@ -1,0 +1,23 @@
+<%= stylesheet_link_tag 'pivot', :plugin => 'sample', :media => 'all' %>
+<%= javascript_include_tag 'pivot', :plugin => 'sample', :media => 'all' %>
+<div id="output"></div>
+<script type="text/javascript">
+  $.getJSON("pivot/list.json", function(data) {
+    $("#output").pivotUI(data);
+  });
+</script>
+<h1>Test</h1>
+<div>
+<%= @msg %>
+</div>
+<h1>Project</h1>
+<div>
+description: <%= @description %>
+</div>
+<div>
+created_on: <%= @created_on %>
+</div>
+<h1>Role</h1>
+<div>
+role_name: <%= @role_name %>
+</div>
